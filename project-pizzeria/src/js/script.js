@@ -128,6 +128,7 @@
       thisProduct.dom.formInputs = thisProduct.dom.form.querySelectorAll(select.all.formInputs);
       thisProduct.dom.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.dom.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      console.log('!!!!!!',thisProduct.dom.priceElem)
       thisProduct.dom.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
       thisProduct.dom.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
       console.log('DOM',thisProduct.dom)
@@ -176,7 +177,7 @@
       const thisProduct = this;
     
       // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
-      const formData = utils.serializeFormToObject(thisProduct.form);
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
     
       // set price to default price
       let price = thisProduct.data.price;
