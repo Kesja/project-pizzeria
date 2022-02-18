@@ -258,7 +258,7 @@
       for(let paramId in thisProduct.data.params) {
         const param = thisProduct.data.params[paramId];
         selectedProducts[paramId] = {
-          label: param.label,
+          label: param.label, 
           options: {},
         };
         
@@ -350,9 +350,10 @@
       const thisCart = this;
 
       thisCart.dom = {};
-
+      
       thisCart.dom.wrapper = element;
-      thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = element.querySelector(select.cart.productList);
     }
 
     initActions() {
@@ -364,8 +365,12 @@
     }
 
     add(menuProduct){
-      // thisCart = this;
-
+      const thisCart = this;
+      const generatedHTML = templates.cartProduct(menuProduct);
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+      thisCart.dom.productList.appendChild(generatedDOM);
+      
+      
       console.log('adding product', menuProduct);
     }
   }
