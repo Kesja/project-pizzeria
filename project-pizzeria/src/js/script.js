@@ -169,6 +169,7 @@
       thisProduct.dom.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
     processOrder() {
@@ -213,6 +214,7 @@
       /* multiply price by amount */
       price *= thisProduct.amountWidget.value;
       // update calculated price in the HTML
+      thisProduct.priceSingle = price;
       thisProduct.dom.priceElem.innerHTML = price;
     }
 
@@ -224,6 +226,51 @@
       thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
         thisProduct.processOrder();
       });
+    }
+
+    addToCart(){
+      const thisProduct = this;
+
+      app.cart.add(thisProduct.prepareCartProduct());
+    }
+
+    prepareCartProduct(){
+      const thisProduct = this;
+
+      const productSummary = {
+        thisProductId: thisProduct.id,
+        thisProductName: thisProduct.data.name,
+        thisProductAmount: thisProduct.amountWidget.value,
+        priceSingle: thisProduct.data.price,
+        price: thisProduct.priceSingle,
+        params: this.prepareCartProductParam(),
+      };
+
+      return productSummary;
+    }
+
+    prepareCartProductParam(){
+      const thisProduct = this;
+
+      const formData = utils.serializeFormToObject(thisProduct.dom.form);
+      const selectedProducts = {};
+
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+        selectedProducts[paramId] = {
+          label: param.label,
+          options: {},
+        };
+        
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          if(optionSelected) {
+            selectedProducts[paramId].options[optionId] = option.label;
+          }
+        }
+      }
+      return selectedProducts;
     }
   }
   
@@ -314,6 +361,12 @@
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
+    }
+
+    add(menuProduct){
+      // thisCart = this;
+
+      console.log('adding product', menuProduct);
     }
   }
 
