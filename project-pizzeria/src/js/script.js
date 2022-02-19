@@ -238,9 +238,9 @@
       const thisProduct = this;
 
       const productSummary = {
-        thisProductId: thisProduct.id,
-        thisProductName: thisProduct.data.name,
-        thisProductAmount: thisProduct.amountWidget.value,
+        id: thisProduct.id,
+        name: thisProduct.data.name,
+        amount: thisProduct.amountWidget.value,
         priceSingle: thisProduct.data.price,
         price: thisProduct.priceSingle,
         params: this.prepareCartProductParam(),
@@ -366,11 +366,11 @@
 
     add(menuProduct){
       const thisCart = this;
+
       const generatedHTML = templates.cartProduct(menuProduct);
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
       thisCart.dom.productList.appendChild(generatedDOM);
-      
-      
+     
       console.log('adding product', menuProduct);
     }
   }
