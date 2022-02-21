@@ -32,8 +32,6 @@
         linkIncrease: 'a[href="#more"]',
       },
     },
-
-    // CODE ADDED START
     cart: {
       productList: '.cart__order-summary',
       toggleTrigger: '.cart__summary',
@@ -52,7 +50,6 @@
       edit: '[href="#edit"]',
       remove: '[href="#remove"]',
     },
-    // CODE ADDED END
   };
   
 
@@ -246,7 +243,9 @@
         priceSingle: thisProduct.data.price,
         price: thisProduct.priceSingle,
         params: this.prepareCartProductParam(),
+
       };
+      console.log('Kutfa',productSummary);
 
       return productSummary;
     }
@@ -359,6 +358,9 @@
       thisCart.dom.subtotalPrice = element.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = element.querySelectorAll(select.cart.totalPrice);
       thisCart.dom.totalNumber = element.querySelector(select.cart.totalNumber);
+      thisCart.dom.form = element.querySelector(select.cart.form);
+      thisCart.dom.adress = element.querySelector(select.cart.address);
+      thisCart.dom.phone = element.querySelector(select.cart.phone);
       
     }
 
@@ -375,6 +377,11 @@
 
       thisCart.dom.productList.addEventListener('remove', function(event){
         thisCart.remove(event.detail.cartProduct);
+      });
+
+      thisCart.dom.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisCart.sendOrder();
       });
     }
 
@@ -431,6 +438,39 @@
       thisCart.update();
     }
 
+    sendOrder(){
+      const thisCart = this;
+      const url = settings.db.url + '/' + settings.db.orders;
+
+      const payload = {
+        address: thisCart.dom.adress.value,
+        phone: thisCart.dom.phone.value,
+        totalPrice: thisCart.totalPrice,
+        subtotalPrice: thisCart.subtotalPrice,
+        totalNumber: thisCart.totalNumber,
+        deliveryFee: thisCart.deliveryFee,
+        products: [],
+      };
+      
+      for(let prod of thisCart.products) {
+        payload.products.push(prod.getData());
+      }
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+      
+      fetch(url, options)
+        .then(function(response){
+          return response.json();
+        }).then(function(parsedResponse){
+          console.log('parsedResonse', parsedResponse);
+        });
+    }
   }
 
   class CartProduct{
@@ -438,6 +478,7 @@
       const thisCartProduct = this;
 
       thisCartProduct.id = menuProduct.id;
+      console.log('dupa', thisCartProduct.id),
       thisCartProduct.name = menuProduct.name;
       thisCartProduct.amount = menuProduct.amount;
       thisCartProduct.priceSingle = menuProduct.price;
@@ -495,7 +536,20 @@
         event.preventDefault();
         thisCartProduct.remove();
       });
+    }
 
+    getData(){
+      const thisCartProduct = this;
+
+      const selectedProduct = {
+        id: thisCartProduct.id,
+        amount: thisCartProduct.amount,
+        price: thisCartProduct.price,
+        priceSingle: thisCartProduct.priceSingle,
+        name: thisCartProduct.name,
+        params: thisCartProduct.params,
+      };
+      return selectedProduct;
     }
   }
 
