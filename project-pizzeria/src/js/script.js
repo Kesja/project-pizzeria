@@ -70,11 +70,6 @@
   };
 
   const settings = {
-    db: {
-      url: '//localhost:3131',
-      products: 'products',
-      orders: 'orders',
-    },
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
@@ -85,6 +80,11 @@
       defaultDeliveryFee: 20,
     },
     // CODE ADDED END
+    db: {
+      url: '//localhost:3131',
+      products: 'products',
+      orders: 'orders',
+    },
   };
 
   const templates = {
@@ -126,7 +126,7 @@
       const thisProduct = this;
 
       thisProduct.dom = {};
-    
+ 
       thisProduct.dom.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       thisProduct.dom.form = thisProduct.element.querySelector(select.menuProduct.form);
       thisProduct.dom.formInputs = thisProduct.dom.form.querySelectorAll(select.all.formInputs);
@@ -147,7 +147,7 @@
         const activeProducts = document.querySelectorAll(select.all.menuProductsActive);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         for (let activeProduct of activeProducts)
-          if (activeProducts !== thisProduct.element) {
+          if (activeProduct !== thisProduct.element) {
             activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
           }
         /* toggle active class on thisProduct.element */
