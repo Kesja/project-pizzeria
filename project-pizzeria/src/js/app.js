@@ -1,27 +1,78 @@
-import {settings, select} from './settings.js';
+import { settings, select, classNames } from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 
 const app = {
-  initMenu: function (){
+  initPages: function () {
     const thisApp = this;
 
-    for(let productData in thisApp.data.products) {
+    thisApp.pages = document.querySelector(select.containerOf.pages).children;
+    thisApp.navLinks = document.querySelectorAll(select.nav.links);
+
+    const idFromHash = window.location.hash.replace('#/', '');
+
+    let pageMatchinHash = thisApp.pages[0].id;
+
+    for (let page of thisApp.pages) {
+      if (page.id === idFromHash) {
+        pageMatchinHash = page.id;
+        break;
+      }
+    }
+
+    thisApp.activatePage(pageMatchinHash);
+
+    for (let link of thisApp.navLinks) {
+      link.addEventListener('click', function (event) {
+        const clickedElement = this;
+        event.preventDefault();
+
+        /* Get page id from href atribute */
+        const id = clickedElement.getAttribute('href').replace('#', '');
+        /* run thisApp.activatePage with this id */
+        thisApp.activatePage(id);
+
+        /* change URL hash */
+        window.location.hash = '#/' + id;
+      });
+    }
+  },
+
+  activatePage: function (pageId) {
+    const thisApp = this;
+
+    /* add class 'active' to matching pages, remove from non-matching */
+    for (let page of thisApp.pages) {
+      page.classList.toggle(classNames.pages.active, page.id === pageId);
+    }
+    /* add class 'active' to matching links, remove from non-matching */
+    for (let link of thisApp.navLinks) {
+      link.classList.toggle(
+        classNames.nav.active,
+        link.getAttribute('href') === '#' + pageId
+      );
+    }
+  },
+
+  initMenu: function () {
+    const thisApp = this;
+
+    for (let productData in thisApp.data.products) {
       new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
     }
   },
 
-  initData: function(){
+  initData: function () {
     const thisApp = this;
 
     thisApp.data = {};
     const url = settings.db.url + '/' + settings.db.products;
 
     fetch(url)
-      .then(function(rawResponse){
+      .then(function (rawResponse) {
         return rawResponse.json();
       })
-      .then(function(parsedResponse){
+      .then(function (parsedResponse) {
         console.log('parsedResponse', parsedResponse);
         thisApp.data.products = parsedResponse;
         thisApp.initMenu();
@@ -29,14 +80,15 @@ const app = {
     console.log('thisApp.data', JSON.stringify(thisApp.data));
   },
 
-  init: function(){
+  init: function () {
     const thisApp = this;
 
+    thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
   },
 
-  initCart: function (){
+  initCart: function () {
     const thisApp = this;
 
     const cartElem = document.querySelector(select.containerOf.cart);
@@ -44,7 +96,7 @@ const app = {
 
     thisApp.prodctList = document.querySelector(select.containerOf.menu);
 
-    thisApp.prodctList.addEventListener('add-to-cart', function(event){
+    thisApp.prodctList.addEventListener('add-to-cart', function (event) {
       app.cart.add(event.detail.product);
     });
   }

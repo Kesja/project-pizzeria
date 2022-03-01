@@ -66,7 +66,7 @@ export const select = {
     remove: '[href="#remove"]',
   },
 };
-  
+
 export const classNames = {
   menuProduct: {
     wrapperActive: 'active',

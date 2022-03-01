@@ -1,9 +1,9 @@
-import {settings, select, templates, classNames} from '../settings.js';
+import { settings, select, templates, classNames } from '../settings.js';
 import utils from '../utils.js';
 import CartProduct from './CartProduct.js';
 
 class Cart {
-  constructor(element){
+  constructor(element) {
     const thisCart = this;
 
     thisCart.products = [];
@@ -13,11 +13,11 @@ class Cart {
 
   }
 
-  getElements(element){
+  getElements(element) {
     const thisCart = this;
 
     thisCart.dom = {};
-      
+
     thisCart.dom.wrapper = element;
     thisCart.dom.toggleTrigger = element.querySelector(select.cart.toggleTrigger);
     thisCart.dom.productList = element.querySelector(select.cart.productList);
@@ -28,51 +28,53 @@ class Cart {
     thisCart.dom.form = element.querySelector(select.cart.form);
     thisCart.dom.adress = element.querySelector(select.cart.address);
     thisCart.dom.phone = element.querySelector(select.cart.phone);
-      
+
   }
 
   initActions() {
     const thisCart = this;
 
-    thisCart.dom.toggleTrigger.addEventListener('click', function(){
+    thisCart.dom.toggleTrigger.addEventListener('click', function () {
       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
     });
 
-    thisCart.dom.productList.addEventListener('updated', function(){
+    thisCart.dom.productList.addEventListener('updated', function () {
       thisCart.update();
     });
 
-    thisCart.dom.productList.addEventListener('remove', function(event){
+    thisCart.dom.productList.addEventListener('remove', function (event) {
       thisCart.remove(event.detail.cartProduct);
     });
 
-    thisCart.dom.form.addEventListener('submit', function(event){
+    thisCart.dom.form.addEventListener('submit', function (event) {
       event.preventDefault();
       thisCart.sendOrder();
     });
   }
 
-  add(menuProduct){
+  add(menuProduct) {
     const thisCart = this;
 
     const generatedHTML = templates.cartProduct(menuProduct);
     const generatedDOM = utils.createDOMFromHTML(generatedHTML);
     thisCart.dom.productList.appendChild(generatedDOM);
-     
+
     thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-      
+
     thisCart.update();
   }
 
-  update(){
+  update() {
     const thisCart = this;
     thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
     thisCart.totalNumber = 0;
     thisCart.subtotalPrice = 0;
 
-    for(thisCart.product of thisCart.products) {
+    for (thisCart.product of thisCart.products) {
       thisCart.totalNumber += thisCart.product.amount;
       thisCart.subtotalPrice += thisCart.product.price;
+
+      console.log('!!!!', thisCart.totalNumber);
     }
     thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
 
@@ -85,7 +87,7 @@ class Cart {
     console.log('subtotalPrice', thisCart.subtotalPrice);
     console.log('Calkowita caena', thisCart.totalPrice);
     //!!!!
-    for (let price of thisCart.dom.totalPrice){
+    for (let price of thisCart.dom.totalPrice) {
       price.innerHTML = thisCart.totalPrice;
     }
 
@@ -96,16 +98,16 @@ class Cart {
 
   }
 
-  remove(menuProduct){
+  remove(menuProduct) {
     const thisCart = this;
 
     menuProduct.dom.wrapper.remove();
     thisCart.products.splice(thisCart.products, 1);
-      
+
     thisCart.update();
   }
 
-  sendOrder(){
+  sendOrder() {
     const thisCart = this;
     const url = settings.db.url + '/' + settings.db.orders;
 
@@ -118,8 +120,8 @@ class Cart {
       deliveryFee: thisCart.deliveryFee,
       products: [],
     };
-      
-    for(let prod of thisCart.products) {
+
+    for (let prod of thisCart.products) {
       payload.products.push(prod.getData());
     }
 
@@ -130,11 +132,11 @@ class Cart {
       },
       body: JSON.stringify(payload),
     };
-      
+
     fetch(url, options)
-      .then(function(response){
+      .then(function (response) {
         return response.json();
-      }).then(function(parsedResponse){
+      }).then(function (parsedResponse) {
         console.log('parsedResonse', parsedResponse);
       });
   }

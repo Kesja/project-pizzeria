@@ -1,15 +1,15 @@
-import {select} from '../settings.js';
+import { select } from '../settings.js';
 import AmountWidget from './AmountWidget.js';
 
-class CartProduct{
+class CartProduct {
   constructor(menuProduct, element) {
     const thisCartProduct = this;
 
     thisCartProduct.id = menuProduct.id;
     thisCartProduct.name = menuProduct.name;
     thisCartProduct.amount = menuProduct.amount;
-    thisCartProduct.priceSingle = menuProduct.price;
-    thisCartProduct.price = menuProduct.priceSingle;
+    thisCartProduct.priceSingle = menuProduct.priceSingle;
+    thisCartProduct.price = menuProduct.price;
     thisCartProduct.params = menuProduct.params;
 
     thisCartProduct.getElements(element);
@@ -17,7 +17,7 @@ class CartProduct{
     thisCartProduct.initAcction();
   }
 
-  getElements(element){
+  getElements(element) {
     const thisCartProduct = this;
 
     thisCartProduct.dom = {};
@@ -29,19 +29,19 @@ class CartProduct{
     thisCartProduct.dom.remove = element.querySelector(select.cartProduct.remove);
   }
 
-  initAmountWidget(){
+  initAmountWidget() {
     const thisCartProduct = this;
-      
+
     thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
 
-    thisCartProduct.dom.amountWidget.addEventListener('updated', function(){
+    thisCartProduct.dom.amountWidget.addEventListener('updated', function () {
       thisCartProduct.amount = thisCartProduct.amountWidget.value;
       thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount;
       thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
     });
   }
 
-  remove(){
+  remove() {
     const thisCartProduct = this;
 
     const event = new CustomEvent('remove', {
@@ -53,19 +53,19 @@ class CartProduct{
     thisCartProduct.dom.wrapper.dispatchEvent(event);
   }
 
-  initAcction(){
+  initAcction() {
     const thisCartProduct = this;
 
-    thisCartProduct.dom.edit.addEventListener('click', function(event){
+    thisCartProduct.dom.edit.addEventListener('click', function (event) {
       event.preventDefault();
     });
-    thisCartProduct.dom.remove.addEventListener('click', function(event){
+    thisCartProduct.dom.remove.addEventListener('click', function (event) {
       event.preventDefault();
       thisCartProduct.remove();
     });
   }
 
-  getData(){
+  getData() {
     const thisCartProduct = this;
 
     const selectedProduct = {
