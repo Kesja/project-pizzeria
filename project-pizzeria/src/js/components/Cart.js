@@ -74,7 +74,6 @@ class Cart {
       thisCart.totalNumber += thisCart.product.amount;
       thisCart.subtotalPrice += thisCart.product.price;
 
-      console.log('!!!!', thisCart.totalNumber);
     }
     thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
 
@@ -82,10 +81,6 @@ class Cart {
       thisCart.totalPrice = 0;
       thisCart.deliveryFee = 0;
     }
-    console.log('deliver', thisCart.deliveryFee);
-    console.log('totalNumber;', thisCart.totalNumber);
-    console.log('subtotalPrice', thisCart.subtotalPrice);
-    console.log('Calkowita caena', thisCart.totalPrice);
     //!!!!
     for (let price of thisCart.dom.totalPrice) {
       price.innerHTML = thisCart.totalPrice;
