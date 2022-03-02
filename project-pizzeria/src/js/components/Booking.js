@@ -33,7 +33,7 @@ class Booking {
     thisBooking.dom.hoursAmount.addEventListener('updated', function (event) {
       event.preventDefault();
     });
-}
+  }
 }
 
 
