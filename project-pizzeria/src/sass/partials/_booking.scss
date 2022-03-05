@@ -173,6 +173,11 @@
       }
 
     }
+
+    &.selected {
+      background: $color-selected;
+      opacity: 0.4;
+    }
   }
 
   [data-table="1"] {
