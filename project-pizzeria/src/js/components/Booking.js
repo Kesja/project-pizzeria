@@ -176,10 +176,9 @@ class Booking {
     const tableId = clickedTable.getAttribute(settings.booking.tableIdAttribute);
 
     if(clickedTable){
-      if(!bookedTable){
+      if(!bookedTable && !clickedTable.classList.contains(classNames.booking.selectedTable)){
         for (let table of thisBooking.dom.tables){
           table.classList.remove(classNames.booking.selectedTable);
-          console.log(table);
         }
         clickedTable.classList.add(classNames.booking.selectedTable);
         thisBooking.selectedTable.push(tableId);
@@ -187,19 +186,16 @@ class Booking {
         if (thisBooking.selectedTable.length >= 2){
           thisBooking.selectedTable.shift();
         }
-      } else {
+      }
+      else if(!bookedTable && clickedTable.classList.contains(classNames.booking.selectedTable)) {
+        clickedTable.classList.remove(classNames.booking.selectedTable);
+        thisBooking.selectedTable.pop();
+      }
+      else {
         alert('This table is not available! Please choose a different one.');
       }
     } 
-    
-    thisBooking.dom.tablesWrapper.addEventListener('click', function(){
-      clickedTable.classList.remove(classNames.booking.selectedTable);
-      thisBooking.selectedTable.pop();
-    });
-
-    console.log(thisBooking.selectedTable);
   }
-
 
   initWidget() {
     const thisBooking = this;
