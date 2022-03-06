@@ -166,6 +166,10 @@ class Booking {
     thisBooking.dom.hourPicker = element.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = element.querySelectorAll(select.booking.tables);
     thisBooking.dom.tablesWrapper = element.querySelector(select.booking.wrapper);
+    thisBooking.dom.form = element.querySelector(select.booking.form);
+    thisBooking.dom.phone = element.querySelector(select.booking.form);
+    thisBooking.dom.adress = element.querySelector(select.booking.address);
+    thisBooking.dom.starters = element.querySelectorAll(select.booking.starters);
 
   }
 
@@ -234,7 +238,55 @@ class Booking {
       thisBooking.initTables(event);
     });
 
+    thisBooking.dom.form.addEventListener('submit', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
+      console.log('click');
+    });
   }
+
+  sendBooking() {
+    const thisBooking = this;
+    const url = settings.db.url + '/' + settings.db.bookings;
+
+    const payload = {
+      date: thisBooking.datePickerWidget.value,
+      hour: thisBooking.hourPickerWidget.value,
+      table: parseInt(thisBooking.selectedTable),
+      duration: thisBooking.hoursAmountWidget.value,
+      ppl: thisBooking.peopleAmountWidget.value,
+      starters: [],
+      phone: thisBooking.dom.phone.value,
+      adress: thisBooking.dom.adress.value,
+    };
+
+    for (let starter of thisBooking.dom.starters) {
+      if (starter.checked) {
+        payload.starters.push(starter.value);
+      }
+    }
+
+    console.log('Payload',payload);
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      success: location.reload(),
+    };
+
+    fetch(url, options)
+      .then(function (response) {
+        return response.json();
+      }).then(function () {
+        thisBooking.makeBooked(payload.date, payload.hour,payload.duration,payload.table);
+      });
+
+    console.log('booked', thisBooking.booked);
+  }
+   
 }
 
 
