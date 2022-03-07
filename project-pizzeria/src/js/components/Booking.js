@@ -146,6 +146,7 @@ class Booking {
         thisBooking.booked[thisBooking.date][thisBooking.hour].includes(tableID)
       ){
         table.classList.add(classNames.booking.tableBooked);
+        table.classList.remove(classNames.booking.selectedTable);
       } else {
         table.classList.remove(classNames.booking.tableBooked);
       }
@@ -183,13 +184,13 @@ class Booking {
       if(!bookedTable && !clickedTable.classList.contains(classNames.booking.selectedTable)){
         for (let table of thisBooking.dom.tables){
           table.classList.remove(classNames.booking.selectedTable);
-        }
+        } 
         clickedTable.classList.add(classNames.booking.selectedTable);
         thisBooking.selectedTable.push(tableId);
         // I assumed that user can book only one table at the time.
         if (thisBooking.selectedTable.length >= 2){
           thisBooking.selectedTable.shift();
-        }
+        } 
       }
       else if(!bookedTable && clickedTable.classList.contains(classNames.booking.selectedTable)) {
         clickedTable.classList.remove(classNames.booking.selectedTable);
@@ -274,14 +275,17 @@ class Booking {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-      success: location.reload(),
+      //success: location.reload(),
     };
 
     fetch(url, options)
       .then(function (response) {
         return response.json();
-      }).then(function () {
-        thisBooking.makeBooked(payload.date, payload.hour,payload.duration,payload.table);
+      }).then(function (parsedResponse) {
+        thisBooking.makeBooked(parsedResponse.date, parsedResponse.hour,parsedResponse.duration,parsedResponse.table);
+        console.log(parsedResponse);
+        thisBooking.updateDOM();
+        
       });
 
     console.log('booked', thisBooking.booked);
