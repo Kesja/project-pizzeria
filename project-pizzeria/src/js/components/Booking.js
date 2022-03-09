@@ -242,7 +242,6 @@ class Booking {
     thisBooking.dom.form.addEventListener('submit', function(event){
       event.preventDefault();
       thisBooking.sendBooking();
-      console.log('click');
     });
   }
 
@@ -285,7 +284,6 @@ class Booking {
         thisBooking.makeBooked(parsedResponse.date, parsedResponse.hour,parsedResponse.duration,parsedResponse.table);
         console.log(parsedResponse);
         thisBooking.updateDOM();
-        
       });
 
     console.log('booked', thisBooking.booked);
