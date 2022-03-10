@@ -87,6 +87,7 @@ const app = {
     const thisApp = this;
 
     thisApp.initPages();
+    thisApp.initHome();
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
