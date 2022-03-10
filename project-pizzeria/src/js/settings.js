@@ -57,6 +57,7 @@ export const select = {
   },
   nav: {
     links: '.main-nav a',
+    homeLinks: '.container-wrapper .nav-link',
   },
   cart: {
     productList: '.cart__order-summary',
@@ -77,10 +78,6 @@ export const select = {
     remove: '[href="#remove"]',
   },
 
-  homePage: {
-    order: '.order',
-    booking: '.booking',
-  }
 };
 
 export const classNames = {

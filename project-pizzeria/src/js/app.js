@@ -9,7 +9,8 @@ const app = {
     const thisApp = this;
 
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
-    thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    thisApp.navLinks = document.querySelectorAll('.main-nav a, .container-wrapper .nav-link');
+    console.log(thisApp.navLinks);
     
 
     const idFromHash = window.location.hash.replace('#/', '');
@@ -37,6 +38,7 @@ const app = {
 
         /* change URL hash */
         window.location.hash = '#/' + id;
+        console.log('click', link);
       });
     }
   },
@@ -89,6 +91,8 @@ const app = {
     thisApp.initCart();
     thisApp.initBooking();
     thisApp.initHome();
+    
+
   },
 
   initCart: function () {
@@ -117,6 +121,8 @@ const app = {
     thisApp.homePageContainer = document.querySelector(select.containerOf.homePage);
     thisApp.homePage = new HomePage(thisApp.homePageContainer);
     thisApp.initPages();
+
+
   }
 };
 app.init();

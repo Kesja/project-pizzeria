@@ -21,8 +21,8 @@ class Carousel{
       // options
       cellAlign: 'left',
       contain: true,
-      draggable: '>1',
       autoPlay: true,
+      prevNextButtons: false,
     });
   }
 }
