@@ -86,7 +86,7 @@ const app = {
   init: function () {
     const thisApp = this;
 
-    thisApp.initPages();
+    //thisApp.initPages();
     thisApp.initHome();
     thisApp.initData();
     thisApp.initCart();
@@ -121,9 +121,12 @@ const app = {
 
     thisApp.homePageContainer = document.querySelector(select.containerOf.homePage);
     thisApp.homePage = new HomePage(thisApp.homePageContainer);
-    thisApp.initPages();
+    //thisApp.initPages();
 
 
-  }
+  },
+  
 };
+app.initPages();
 app.init();
+
