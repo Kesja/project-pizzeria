@@ -56,8 +56,7 @@ export const select = {
     address: '.booking-form [name="address"]',
   },
   nav: {
-    links: '.main-nav a',
-    homeLinks: '.container-wrapper .nav-link',
+    links: '.main-nav a, .container-wrapper .nav-link'
   },
   cart: {
     productList: '.cart__order-summary',
